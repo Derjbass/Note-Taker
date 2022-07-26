@@ -28,7 +28,6 @@ router.post('/notes', (req, res) => {
 
             //add to array
             note_data.push(new_note);
-            console.log(note_data);
 
             //write DB file adding note
             fs.promises.writeFile(db_path, JSON.stringify(note_data, null, 2))
