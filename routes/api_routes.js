@@ -37,19 +37,22 @@ router.post('/notes', (req, res) => {
         })
 })
 
-router.delete('/notes', (req, res) => {
+router.delete('/notes/:id', (req, res) => {
     getDbData()
         .then(note => {
-            const id = req.body.id;
-            //console.log(note.id);
-            const obj = note.find(note => note.id === id);
+            //save id param
+            const id = req.params.id;
+            //find matching id in array of objects and save to obj
+            const obj = note.find(note => note.id.toString() === id);
+            //get index of obj to splice from array
             const index = note.indexOf(obj);
-
+            //remove obj from array of objects
             note.splice(index, 1)
 
+            //write new file with obj deleted
             fs.promises.writeFile(db_path, JSON.stringify(note, null, 2))
                 .then(() => {
-                    console.log('Notes updated successfully');
+                    console.log('Notes deleted successfully');
                     res.json(note)
                 })
                 .catch(err => console.log(err));
